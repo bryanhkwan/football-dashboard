@@ -1,0 +1,14 @@
+{
+  "name": "still-haze-bb4e",
+  "main": "src/index.js",
+  "compatibility_date": "2024-09-23",
+  // KV namespace for caching CFBD API responses (30-day TTL)
+  "kv_namespaces": [
+    {
+      "binding": "FOOTBALL_CACHE",
+      "id": "15c45291bfed4e80828db9f62a9c0ed3"
+    }
+  ]
+  // Secret: football-api (your CFBD Bearer token) — set via:
+  //   npx wrangler secret put football-api
+}
