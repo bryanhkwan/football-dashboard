@@ -455,6 +455,18 @@ td.total-comp { font-weight: 600; color: var(--green); }
 .warning-box ul  { margin-top: 6px; margin-left: 16px; }
 .warning-box li  { margin-top: 2px; }
 .preview-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px; }
+.preview-table-wrap {
+  max-height: clamp(280px, 48vh, 460px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.preview-table-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(15,23,42,0.96);
+}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) {
@@ -555,6 +567,23 @@ td.total-comp { font-weight: 600; color: var(--green); }
   margin-top: 4px;
   max-width: 56ch;
   font-size: 12px;
+}
+.exp-roster-table-wrap {
+  max-height: clamp(320px, 56vh, 540px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.exp-roster-table-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(15,23,42,0.96);
+}
+.exp-roster-table-wrap .tfoot-row td {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
 }
 .exp-score-col,
 .exp-value-col {

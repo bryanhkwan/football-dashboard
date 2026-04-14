@@ -840,7 +840,7 @@ function expRenderPreview() {
       </div>
       ${errors.length > 0 ? `<div class="warning-box"><strong>⚠ ${errors.length} warning${errors.length !== 1 ? 's' : ''}</strong><ul>${errors.map(e => `<li>${esc(e.message)}</li>`).join('')}</ul></div>` : ''}
       <div class="card"><div class="card-header"><h2>Player Rows (${players.length})</h2></div>
-        <div class="table-wrap"><table class="data-table"><thead><tr>
+        <div class="table-wrap preview-table-wrap"><table class="data-table"><thead><tr>
           <th>Name</th><th>Position</th><th>Year</th><th>Housing</th>
           <th class="num">Rev Share</th><th class="num">Stipend</th><th class="num">Total Comp</th><th>Contract</th>
         </tr></thead><tbody>
@@ -928,7 +928,7 @@ function expRenderDashboard() {
           ${expBuildFilterOptions('year', 'All Years')}
           ${expBuildFilterOptions('campus', 'All Housing')}
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap exp-roster-table-wrap">
           <table class="data-table" id="exp-player-table">
             <thead><tr><th class="td-link">Link</th>${colHeaders}<th class="num">Role Score</th><th class="num">Value Index</th><th class="td-action">Actions</th></tr></thead>
             <tbody id="exp-player-tbody"></tbody>

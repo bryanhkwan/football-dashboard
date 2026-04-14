@@ -114,11 +114,7 @@ function csvEscape(v) {
     const outPath = path.resolve(process.cwd(), 'sample.csv');
     fs.writeFileSync(outPath, lines.join('\n'));
     console.log('Wrote', outPath, '(', roster.length, 'players, estimated budget', estimatedBudget, ')');
-
-    // Also write a .xlsx-compatible CSV file name so Excel will open it directly if needed
-    const altPath = path.resolve(process.cwd(), 'sample.xlsx');
-    fs.writeFileSync(altPath, lines.join('\n'));
-    console.log('Wrote also', altPath, '(CSV content; Excel will open it)');
+    console.log('For a real Excel workbook, run scripts/generate_sample_xlsx.js.');
 
   } catch (err) {
     console.error('Error:', err);
