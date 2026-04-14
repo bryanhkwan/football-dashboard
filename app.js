@@ -47,7 +47,17 @@ function switchPage(pageId) {
     expRender();
   } else if (pageId === 'pagePlayers') {
     if (!natState.loaded && !natState.loading) {
-      natRenderPage(); // Shows "Load" prompt
+      // Ping the Cloudflare worker health endpoint first so we don't accidentally
+      // attempt a heavy CFBD pull from the worker if it's unreachable or misconfigured.
+      fetch(WORKER_URL + '/health', { method: 'GET' })
+        .then(res => res.ok ? natLoadData() : Promise.reject(new Error('health check failed ' + res.status)))
+        .catch(err => {
+          console.warn('Worker health check failed, showing Load prompt:', err);
+          // Render the manual Load prompt so the user can retry.
+          natRenderPage();
+        });
+    } else {
+      natRenderPage();
     }
   }
 }
@@ -68,8 +78,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // Render initial page
   expRender();
 
-  // Prepare players page (just render the load prompt)
-  natRenderPage();
+  // Auto-load national player data in the background on boot.
+  // All requests go through the Cloudflare worker cache (30-day TTL),
+  // so this won't burn CFBD API quota on repeated opens.
+  natLoadData();
 });
 
 // ── Window bridge (for debugging) ────────────────────────────

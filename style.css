@@ -794,9 +794,9 @@ td.total-comp { font-weight: 600; color: var(--green); }
   align-items: flex-start;
 }
 .nat-filter-head h2 {
-  font-size: 28px;
-  line-height: 1;
-  margin-top: 8px;
+  font-size: 22px;
+  line-height: 1.1;
+  margin-top: 4px;
 }
 .nat-filter-meta {
   display: flex;
@@ -825,25 +825,42 @@ td.total-comp { font-weight: 600; color: var(--green); }
 .nat-search-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
 }
 .nat-search {
   flex: 1;
-  min-width: 240px;
+  min-width: 200px;
 }
-.nat-table-card { overflow: hidden; }
+.nat-table-card { overflow: hidden; border-radius: var(--radius); }
 .nat-table-wrap { overflow-x: auto; }
-.nat-table { font-size: 12px; }
+.nat-table { font-size: 13px; border-collapse: separate; border-spacing: 0; }
 .nat-table th {
   font-size: 10px;
-  padding: 12px 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 14px;
   background: rgba(51,65,85,0.32);
+  white-space: nowrap;
+  color: var(--text-3);
 }
 .nat-table td {
-  padding: 12px 12px;
-  border-bottom: 1px solid rgba(148,163,184,0.08);
+  padding: 6px 14px;
+  border-bottom: 1px solid rgba(148,163,184,0.06);
+  vertical-align: middle;
 }
+.nat-table tbody tr { transition: background 0.12s; }
+.nat-table tbody tr:hover { background: rgba(148,163,184,0.06); }
+.nat-table td.num {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--text-3);
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* ── Player name ── */
 .nat-player-name {
   cursor: pointer;
   font-weight: 600;
@@ -851,8 +868,111 @@ td.total-comp { font-weight: 600; color: var(--green); }
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 13px;
 }
 .nat-player-name:hover { color: var(--green); }
+
+/* ── Team + conf inline cell ── */
+.nat-team-cell {
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.nat-conf-sub {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-left: 4px;
+}
+.nat-conf-sub::before {
+  content: '·';
+  margin-right: 4px;
+}
+
+/* ── Position badge ── */
+.badge-pos {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: rgba(34,197,94,0.14);
+  color: #8ef0b0;
+  border: 1px solid rgba(34,197,94,0.18);
+}
+
+/* ── Score cell (inline pill: "77 Impact") ── */
+.nat-score-cell { white-space: nowrap; }
+.nat-score-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+.nat-score-inline strong { font-size: 14px; }
+.nat-score-inline.is-up {
+  border-color: rgba(34,197,94,0.22);
+  background: rgba(34,197,94,0.10);
+  color: #8ef0b0;
+}
+.nat-score-inline.is-neutral {
+  border-color: rgba(148,163,184,0.18);
+  background: rgba(148,163,184,0.08);
+  color: var(--text-3);
+}
+.nat-score-inline.is-down {
+  border-color: rgba(255,199,44,0.22);
+  background: rgba(255,199,44,0.10);
+  color: #fdd762;
+}
+.nat-score-empty {
+  color: var(--text-faint);
+  font-size: 14px;
+}
+
+/* ── Benchmark / signal chips ── */
+.nat-signals-cell { white-space: nowrap; }
+.nat-benchmark-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+.nat-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.nat-chip.is-up {
+  border-color: rgba(34,197,94,0.22);
+  background: rgba(34,197,94,0.10);
+  color: #8ef0b0;
+}
+.nat-chip.is-neutral {
+  border-color: rgba(148,163,184,0.16);
+  background: rgba(148,163,184,0.06);
+  color: var(--text-3);
+}
+.nat-chip.is-down {
+  border-color: rgba(255,199,44,0.20);
+  background: rgba(255,199,44,0.08);
+  color: #fdd762;
+}
+.nat-chip-more {
+  font-size: 10px;
+  color: var(--text-faint);
+  padding-left: 2px;
+}
+.text-faint { color: var(--text-faint); }
 .row-toledo {
   background: rgba(255,199,44,0.08) !important;
   box-shadow: inset 3px 0 0 var(--toledo);
@@ -921,23 +1041,33 @@ td.total-comp { font-weight: 600; color: var(--green); }
   align-items: center;
   gap: 10px;
 }
+/* Legacy grade-stack kept for watchlist cards only */
 .nat-grade-stack {
-  display: grid;
-  gap: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
-.nat-grade-pill,
-.nat-benchmark-pill {
+.nat-grade-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
-  min-height: 24px;
-  padding: 4px 10px;
+  padding: 3px 10px;
   border-radius: 999px;
   border: 1px solid var(--border);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.nat-benchmark-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 .nat-grade-pill.is-up,
@@ -970,18 +1100,24 @@ td.total-comp { font-weight: 600; color: var(--green); }
 }
 .nat-pin-col,
 .nat-pin-cell {
-  width: 44px;
+  width: 36px;
   text-align: center !important;
+  padding-left: 6px !important;
+  padding-right: 4px !important;
 }
 .nat-watch-pin {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.22);
-  background: rgba(15,23,42,0.46);
+  border: 1px solid rgba(148,163,184,0.16);
+  background: transparent;
   color: var(--text-faint);
-  font-size: 15px;
+  font-size: 13px;
+  cursor: pointer;
   transition: transform 0.15s, background 0.15s, color 0.15s, border-color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .nat-watch-pin:hover {
   transform: translateY(-1px);
@@ -1063,7 +1199,8 @@ td.total-comp { font-weight: 600; color: var(--green); }
   align-items: center;
   justify-content: center;
   gap: 16px;
-  padding: 8px 0;
+  padding: 12px 0;
+  font-size: 13px;
 }
 
 /* ===== LOADING / SPINNER ===== */

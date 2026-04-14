@@ -240,22 +240,18 @@ function natGetPage(filtered) {
   return filtered.slice(start, start + natState.pageSize);
 }
 
-// ── Stat display columns ─────────────────────────────────────
+// ── Stat display columns (condensed for readability) ─────────
 
 const NAT_DISPLAY_COLS = [
-  { key: 'passing_YDS', label: 'Pass YDS' },
-  { key: 'passing_TD', label: 'Pass TD' },
-  { key: 'passing_INT', label: 'INT' },
-  { key: 'passing_PCT', label: 'Pass %' },
-  { key: 'rushing_YDS', label: 'Rush YDS' },
-  { key: 'rushing_TD', label: 'Rush TD' },
-  { key: 'rushing_CAR', label: 'CAR' },
-  { key: 'receiving_YDS', label: 'Rec YDS' },
-  { key: 'receiving_TD', label: 'Rec TD' },
-  { key: 'receiving_REC', label: 'REC' },
-  { key: 'defensive_TACKLES', label: 'Tackles' },
-  { key: 'defensive_SACKS', label: 'Sacks' },
-  { key: 'interceptions_INT', label: 'Def INT' },
+  { key: 'passing_YDS',        label: 'P.YDS' },
+  { key: 'passing_TD',         label: 'P.TD' },
+  { key: 'rushing_YDS',        label: 'R.YDS' },
+  { key: 'rushing_TD',         label: 'R.TD' },
+  { key: 'receiving_YDS',      label: 'Rec' },
+  { key: 'receiving_TD',       label: 'Rec TD' },
+  { key: 'defensive_TACKLES',  label: 'TKL' },
+  { key: 'defensive_SACKS',    label: 'SCK' },
+  { key: 'interceptions_INT',  label: 'INT' },
 ];
 
 // ── Formatting helpers ───────────────────────────────────────
@@ -283,23 +279,18 @@ function natFmtStars(stars) {
 
 function natRenderScore(player) {
   const assessment = evalGetPlayerAssessment(player);
-  if (!assessment) return '<span class="nat-grade-pill is-empty">—</span>';
-  return `
-    <div class="nat-grade-stack">
-      <span class="nat-grade-pill is-${assessment.grade.tone}">${esc(assessment.grade.label)}</span>
-      <strong>${fmtNum(assessment.score, 0)}</strong>
-    </div>`;
+  if (!assessment) return '<span class="nat-score-empty">—</span>';
+  return `<span class="nat-score-inline is-${assessment.grade.tone}"><strong>${fmtNum(assessment.score, 0)}</strong>${esc(assessment.grade.label)}</span>`;
 }
 
 function natRenderBenchmarkPreview(player) {
   const assessment = evalGetPlayerAssessment(player);
-  if (!assessment || assessment.highlightMetrics.length === 0) return '—';
-  return `
-    <div class="nat-benchmark-list">
-      ${assessment.highlightMetrics.map(metric => `
-        <span class="nat-benchmark-pill is-${metric.status.tone}">${esc(metric.label)} · ${esc(metric.status.label)}</span>
-      `).join('')}
-    </div>`;
+  if (!assessment || assessment.highlightMetrics.length === 0) return '<span class="text-faint">—</span>';
+  // Show max 2 benchmarks to keep the row compact
+  const top = assessment.highlightMetrics.slice(0, 2);
+  return `<div class="nat-benchmark-row">${top.map(m =>
+    `<span class="nat-chip is-${m.status.tone}">${esc(m.label)}</span>`
+  ).join('')}${assessment.highlightMetrics.length > 2 ? `<span class="nat-chip-more">+${assessment.highlightMetrics.length - 2}</span>` : ''}</div>`;
 }
 
 function natRenderWatchlist() {
@@ -626,13 +617,12 @@ function natRenderPage() {
           <table class="data-table nat-table" id="nat-table">
             <thead>
               <tr>
-                <th class="nat-pin-col">★</th>
+                <th class="nat-pin-col"></th>
                 <th class="sortable${natState.sort.key === 'name' ? ' sorted' : ''}" data-sort="name">Player <span class="sort-ind">${natState.sort.key === 'name' ? (natState.sort.dir === 'asc' ? '↑' : '↓') : ''}</span></th>
                 <th class="sortable${natState.sort.key === 'team' ? ' sorted' : ''}" data-sort="team">Team <span class="sort-ind">${natState.sort.key === 'team' ? (natState.sort.dir === 'asc' ? '↑' : '↓') : ''}</span></th>
-                <th>Conf</th>
                 <th>Pos</th>
                 <th class="sortable" data-sort="score">Score <span class="sort-ind">${natState.sort.key === 'score' ? (natState.sort.dir === 'asc' ? '↑' : '↓') : ''}</span></th>
-                <th>Benchmarks</th>
+                <th>Signals</th>
                 ${NAT_DISPLAY_COLS.map(col => `
                   <th class="num sortable${natState.sort.key === col.key ? ' sorted' : ''}" data-sort="${col.key}">${col.label} <span class="sort-ind">${natState.sort.key === col.key ? (natState.sort.dir === 'asc' ? '↑' : '↓') : ''}</span></th>
                 `).join('')}
@@ -641,17 +631,16 @@ function natRenderPage() {
             <tbody id="nat-tbody">
               ${page.map((player, index) => `
                 <tr class="${player.isToledo ? 'row-toledo' : (index % 2 === 0 ? 'row-even' : 'row-odd')}" data-player-id="${player.playerId}">
-                  <td class="nat-pin-cell"><button class="nat-watch-pin${evalIsWatchlisted(player.playerId) ? ' is-active' : ''}" data-watch-id="${player.playerId}" title="${evalIsWatchlisted(player.playerId) ? 'Remove from watchlist' : 'Add to watchlist'}">★</button></td>
+                  <td class="nat-pin-cell"><button class="nat-watch-pin${evalIsWatchlisted(player.playerId) ? ' is-active' : ''}" data-watch-id="${player.playerId}" title="${evalIsWatchlisted(player.playerId) ? 'Unpin' : 'Pin'}">★</button></td>
                   <td class="nat-player-name">${player.isToledo ? '<span class="badge badge-toledo">TOL</span>' : ''}<span>${esc(player.name)}</span></td>
-                  <td>${esc(player.team)}</td>
-                  <td><span class="text-muted">${esc(player.conference)}</span></td>
-                  <td>${player.position ? `<span class="badge badge-green">${esc(player.position)}</span>` : '—'}</td>
-                  <td>${natRenderScore(player)}</td>
-                  <td>${natRenderBenchmarkPreview(player)}</td>
+                  <td class="nat-team-cell"><span>${esc(player.team)}</span>${player.conference ? `<span class="nat-conf-sub">${esc(player.conference)}</span>` : ''}</td>
+                  <td>${player.position ? `<span class="badge badge-pos">${esc(player.position)}</span>` : '—'}</td>
+                  <td class="nat-score-cell">${natRenderScore(player)}</td>
+                  <td class="nat-signals-cell">${natRenderBenchmarkPreview(player)}</td>
                   ${NAT_DISPLAY_COLS.map(col => `<td class="num">${natFmtStat(col.key, player.stats[col.key])}</td>`).join('')}
                 </tr>
               `).join('')}
-              ${page.length === 0 ? `<tr><td colspan="${7 + NAT_DISPLAY_COLS.length}" class="table-empty">No players match your current filters.</td></tr>` : ''}
+              ${page.length === 0 ? `<tr><td colspan="${6 + NAT_DISPLAY_COLS.length}" class="table-empty">No players match your current filters.</td></tr>` : ''}
             </tbody>
           </table>
         </div>
