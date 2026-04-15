@@ -4,46 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Toledo Football Dashboard</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <!-- ── Top Nav ──────────────────────────────────────── -->
-    <nav class="nav" id="topNav">
-      <div class="nav-brand">
-        <span class="nav-logo">🏈</span>
-        <div>
-          <p class="nav-title">Toledo Football</p>
-          <p class="nav-sub" id="navSub">Dashboard</p>
-        </div>
-      </div>
-      <div class="pageNav" id="pageNav">
-        <button class="pageNavBtn active" data-page="pageExpenses">Expenses</button>
-        <button class="pageNavBtn" data-page="pagePlayers">Players</button>
-      </div>
-      <div class="nav-actions" id="navActions"></div>
-    </nav>
-
-    <!-- ── Page: Expenses (Tab 1) ──────────────────────── -->
-    <div id="pageExpenses" class="page active">
-      <div id="expContent"></div>
-    </div>
-
-    <!-- ── Page: National Players (Tab 2) ──────────────── -->
-    <div id="pagePlayers" class="page">
-      <div id="natContent"></div>
-    </div>
-
-    <!-- Scripts: modules loaded in dependency order -->
-    <script src="modules/config.js"></script>
-    <script src="modules/cache.js"></script>
-    <script src="modules/matching.js"></script>
-    <script src="modules/evaluation.js"></script>
-    <script src="modules/expenses.js"></script>
-    <script src="modules/national.js"></script>
-    <script src="modules/profile.js"></script>
-    <script src="app.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-

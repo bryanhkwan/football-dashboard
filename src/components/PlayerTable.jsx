@@ -9,7 +9,7 @@ function Select({ value, onChange, placeholder, options }) {
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 min-w-[140px]"
+      className="input-dash min-w-[140px]"
     >
       <option value="">{placeholder}</option>
       {options.map((o) => (
@@ -71,16 +71,15 @@ export default function PlayerTable({ players }) {
 
   return (
     <div>
-      {/* Filter bar */}
       <div className="flex flex-wrap gap-3 mb-4">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dash-muted" />
           <input
             type="text"
             placeholder="Search players…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+            className="input-dash w-full pl-9 pr-3 py-2 placeholder:text-dash-muted/70"
           />
         </div>
         <Select
@@ -103,11 +102,10 @@ export default function PlayerTable({ players }) {
         />
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-slate-700">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto rounded-dash border border-white/[0.08] bg-[rgba(5,11,20,0.22)] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
+        <table className="w-full text-sm border-collapse">
           <thead>
-            <tr className="bg-slate-700/50 text-slate-400 uppercase text-xs tracking-wide">
+            <tr className="text-[10px] font-bold uppercase tracking-[0.07em] text-[#9db1ce] bg-gradient-to-b from-[rgba(18,31,52,0.98)] to-[rgba(9,17,30,0.98)] border-b border-[rgba(255,210,0,0.18)] shadow-[inset_0_-1px_0_rgba(255,210,0,0.14)]">
               <th className="text-left px-4 py-3">Player</th>
               <th className="text-left px-4 py-3">Position</th>
               <th className="text-left px-4 py-3">Year</th>
@@ -118,10 +116,10 @@ export default function PlayerTable({ players }) {
               <th className="text-center px-4 py-3">Contract</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-700">
+          <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={8} className="text-center py-10 text-slate-500">
+                <td colSpan={8} className="text-center py-10 text-dash-muted text-sm">
                   No players match your filters
                 </td>
               </tr>
@@ -129,30 +127,32 @@ export default function PlayerTable({ players }) {
               filtered.map((p, idx) => (
                 <tr
                   key={p.id}
-                  className={idx % 2 === 0 ? 'bg-slate-800/50' : 'bg-slate-800/20'}
+                  className={`border-b border-white/[0.035] transition-colors hover:bg-[rgba(255,210,0,0.04)] ${
+                    idx % 2 === 0 ? 'bg-[rgba(255,255,255,0.016)]' : ''
+                  }`}
                 >
-                  <td className="px-4 py-3 font-medium text-white">
+                  <td className="px-4 py-3 font-semibold text-[#f4f8ff]">
                     {p.firstName} {p.lastName}
                   </td>
                   <td className="px-4 py-3">
                     {p.position ? (
-                      <span className="bg-green-900/40 text-green-400 px-2 py-0.5 rounded text-xs font-medium">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold text-dash-accent bg-[rgba(255,210,0,0.1)] border border-[rgba(255,210,0,0.22)]">
                         {p.position}
                       </span>
                     ) : (
                       '—'
                     )}
                   </td>
-                  <td className="px-4 py-3 text-slate-300">{p.year || '—'}</td>
-                  <td className="px-4 py-3 text-slate-300">{p.campus || '—'}</td>
-                  <td className="px-4 py-3 text-right text-slate-300">{fmt(p.revShare)}</td>
-                  <td className="px-4 py-3 text-right text-slate-300">{fmt(p.stipend)}</td>
-                  <td className="px-4 py-3 text-right font-semibold text-green-400">
+                  <td className="px-4 py-3 text-[#dce6f4]">{p.year || '—'}</td>
+                  <td className="px-4 py-3 text-[#dce6f4]">{p.campus || '—'}</td>
+                  <td className="px-4 py-3 text-right text-[#dce6f4]">{fmt(p.revShare)}</td>
+                  <td className="px-4 py-3 text-right text-[#dce6f4]">{fmt(p.stipend)}</td>
+                  <td className="px-4 py-3 text-right font-semibold text-status-good">
                     {fmt(p.totalCompensation)}
                   </td>
                   <td className="px-4 py-3 text-center">
                     {p.contractLength !== null ? (
-                      <span className="bg-purple-900/40 text-purple-400 px-2 py-0.5 rounded text-xs font-medium">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold text-[#c4b5fd] bg-[rgba(139,92,246,0.12)] border border-[rgba(139,92,246,0.28)]">
                         {p.contractLength}mo
                       </span>
                     ) : (
@@ -165,13 +165,13 @@ export default function PlayerTable({ players }) {
           </tbody>
           {filtered.length > 0 && (
             <tfoot>
-              <tr className="bg-slate-700/60 text-white font-semibold border-t border-slate-600">
+              <tr className="bg-[rgba(18,31,52,0.55)] text-[#f7fbff] font-semibold border-t border-white/[0.08]">
                 <td className="px-4 py-3" colSpan={4}>
                   Total ({filtered.length} player{filtered.length !== 1 ? 's' : ''})
                 </td>
                 <td className="px-4 py-3 text-right">{fmt(totals.revShare)}</td>
                 <td className="px-4 py-3 text-right">{fmt(totals.stipend)}</td>
-                <td className="px-4 py-3 text-right text-green-400">{fmt(totals.total)}</td>
+                <td className="px-4 py-3 text-right text-status-good">{fmt(totals.total)}</td>
                 <td className="px-4 py-3" />
               </tr>
             </tfoot>
@@ -179,7 +179,7 @@ export default function PlayerTable({ players }) {
         </table>
       </div>
 
-      <p className="text-xs text-slate-500 mt-2">
+      <p className="text-xs text-dash-muted mt-2">
         {filtered.length} of {players.length} player{players.length !== 1 ? 's' : ''} shown
       </p>
     </div>

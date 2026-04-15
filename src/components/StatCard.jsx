@@ -1,14 +1,14 @@
-export default function StatCard({ label, value, sub, valueClass = 'text-white', icon: Icon }) {
+export default function StatCard({ label, value, sub, valueClass = 'text-dash-fg', icon: Icon }) {
   return (
-    <div className="bg-slate-800 rounded-xl p-5 border border-slate-700 flex flex-col gap-1">
+    <div className="dash-card p-5 flex flex-col gap-1 relative z-[1]">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+        <span className="text-[10.5px] font-bold text-dash-muted uppercase tracking-[0.08em]">
           {label}
         </span>
-        {Icon && <Icon className="w-4 h-4 text-slate-500" />}
+        {Icon && <Icon className="w-4 h-4 text-dash-muted/80" />}
       </div>
-      <span className={`text-3xl font-bold tracking-tight ${valueClass}`}>{value}</span>
-      {sub && <span className="text-xs text-slate-500 mt-0.5">{sub}</span>}
+      <span className={`text-3xl font-extrabold tracking-tight ${valueClass}`}>{value}</span>
+      {sub && <span className="text-xs text-dash-muted mt-0.5">{sub}</span>}
     </div>
   );
 }

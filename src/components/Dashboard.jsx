@@ -17,8 +17,10 @@ import {
 
 function ChartCard({ title, children }) {
   return (
-    <div className="bg-slate-800 rounded-xl border border-slate-700 p-5">
-      <h3 className="text-sm font-semibold text-slate-300 mb-4">{title}</h3>
+    <div className="dash-card p-5 relative z-[1]">
+      <h3 className="text-xs font-extrabold uppercase tracking-[0.12em] text-dash-muted mb-4 pl-3 border-l-[3px] border-dash-accent/40">
+        {title}
+      </h3>
       {children}
     </div>
   );
@@ -33,10 +35,10 @@ export default function Dashboard({ players, budget, onUploadNew, onClearData })
 
   const remainingClass =
     stats.remaining < 0
-      ? 'text-red-400'
+      ? 'text-status-bad'
       : stats.remaining === 0
-      ? 'text-slate-400'
-      : 'text-green-400';
+      ? 'text-dash-muted'
+      : 'text-status-good';
 
   const RemainingIcon =
     stats.remaining < 0 ? TrendingDown : stats.remaining === 0 ? Minus : TrendingUp;
@@ -51,66 +53,73 @@ export default function Dashboard({ players, budget, onUploadNew, onClearData })
 
   return (
     <div className="min-h-screen">
-      {/* Sticky nav */}
-      <nav className="sticky top-0 z-10 bg-slate-900/90 backdrop-blur border-b border-slate-800 px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🏈</span>
+      <nav className="dash-nav px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-start gap-3 min-w-[240px]">
+          <span className="text-2xl leading-none mt-0.5" aria-hidden>
+            🏈
+          </span>
           <div>
-            <h1 className="font-bold text-white leading-none">Football Dashboard</h1>
-            <p className="text-xs text-slate-400">{players.length} players tracked</p>
+            <div className="flex flex-wrap gap-2 mb-2">
+              <span className="inline-flex items-center px-[11px] py-1.5 rounded-full border border-white/[0.08] bg-white/[0.035] text-[10px] font-extrabold tracking-[0.14em] uppercase text-[#cad7ea]">
+                Toledo Football Ops
+              </span>
+              <span className="inline-flex items-center px-[11px] py-1.5 rounded-full border border-dash-accent/25 bg-gradient-to-br from-[rgba(255,210,0,0.18)] to-[rgba(255,210,0,0.08)] text-[10px] font-extrabold tracking-[0.14em] uppercase text-dash-accent">
+                Expense board
+              </span>
+            </div>
+            <h1 className="text-[27px] font-extrabold tracking-tight text-[#f8fbff] leading-tight">
+              Football Dashboard
+            </h1>
+            <p className="text-xs text-dash-muted mt-2 max-w-xl leading-relaxed opacity-90">
+              {players.length} players tracked · Rev share, stipends, and roster spend in one view.
+            </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onClearData}
-            className="text-xs text-slate-500 hover:text-slate-300 transition-colors px-2 py-1"
-          >
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+          <button type="button" onClick={onClearData} className="btn-ghost-dash">
             Clear data
           </button>
-          <button
-            onClick={onUploadNew}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          >
+          <button type="button" onClick={onUploadNew} className="btn-primary-dash">
             <Upload className="w-4 h-4" />
             Upload New File
           </button>
         </div>
       </nav>
 
-      <div className="px-6 py-8 max-w-7xl mx-auto">
-        {/* Budget utilization bar */}
+      <div className="px-6 py-8 max-w-[1540px] mx-auto">
         {stats.totalBudget > 0 && (
-          <div className="mb-6 bg-slate-800 rounded-xl border border-slate-700 p-4">
+          <div className="dash-card p-5 mb-6 relative z-[1]">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-slate-400 font-medium">Budget Utilization</span>
+              <span className="text-xs font-bold uppercase tracking-[0.06em] text-dash-muted">
+                Budget utilization
+              </span>
               <span
-                className={`text-sm font-bold ${
-                  budgetPct >= 100 ? 'text-red-400' : 'text-green-400'
+                className={`text-sm font-extrabold ${
+                  budgetPct >= 100 ? 'text-status-bad' : 'text-status-good'
                 }`}
               >
                 {budgetPct.toFixed(1)}%
               </span>
             </div>
-            <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-3 rounded-full overflow-hidden bg-[rgba(5,11,20,0.55)] border border-white/[0.06]">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
                   budgetPct >= 90
-                    ? 'bg-red-500'
+                    ? 'bg-gradient-to-r from-status-bad to-red-400'
                     : budgetPct >= 70
-                    ? 'bg-amber-500'
-                    : 'bg-green-500'
+                    ? 'bg-gradient-to-r from-dash-accent to-dash-accent-dark'
+                    : 'bg-gradient-to-r from-status-good to-emerald-400'
                 }`}
                 style={{ width: `${budgetPct}%` }}
               />
             </div>
-            <div className="flex justify-between mt-1.5 text-xs text-slate-500">
+            <div className="flex justify-between mt-2 text-[11px] text-dash-muted">
               <span>{fmt(stats.totalCommitted)} committed</span>
               <span>{fmt(stats.totalBudget)} total budget</span>
             </div>
           </div>
         )}
 
-        {/* Stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatCard
             label="Total Budget"
@@ -123,7 +132,7 @@ export default function Dashboard({ players, budget, onUploadNew, onClearData })
             value={fmt(stats.totalCommitted)}
             sub="Rev share + stipends"
             icon={DollarSign}
-            valueClass="text-blue-400"
+            valueClass="text-dash-blue-2"
           />
           <StatCard
             label="Remaining Budget"
@@ -146,7 +155,6 @@ export default function Dashboard({ players, budget, onUploadNew, onClearData })
           />
         </div>
 
-        {/* Charts grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <ChartCard title="Spend by Position">
             <SpendByPosition data={spendByPosition} />
@@ -162,9 +170,13 @@ export default function Dashboard({ players, budget, onUploadNew, onClearData })
           </ChartCard>
         </div>
 
-        {/* Player roster table */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6">
-          <h2 className="font-semibold text-white mb-5 text-base">Player Roster</h2>
+        <div className="dash-card p-6 relative z-[1]">
+          <div className="px-4 py-2.5 -mx-6 -mt-6 mb-5 border-b border-dash-line border-l-[3px] border-l-dash-accent/50 bg-[rgba(255,210,0,0.03)]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-dash-muted">
+              Player roster
+            </p>
+            <h2 className="text-sm font-extrabold text-[#f7fbff] mt-1">Roster & compensation</h2>
+          </div>
           <PlayerTable players={players} />
         </div>
       </div>

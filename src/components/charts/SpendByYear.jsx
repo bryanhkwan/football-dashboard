@@ -10,14 +10,14 @@ import {
 } from 'recharts';
 import { fmt } from '../../utils/calculations';
 
-const COLORS = ['#3b82f6', '#2563eb', '#60a5fa', '#1d4ed8', '#93c5fd'];
+const COLORS = ['#244f8f', '#173968', '#3b82f6', '#60a5fa', '#93c5fd'];
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm shadow-xl">
-      <p className="font-semibold text-white mb-1">{label}</p>
-      <p className="text-blue-400">{fmt(payload[0].value)}</p>
+    <div className="rounded-lg border border-white/[0.08] bg-[rgba(13,24,43,0.96)] px-3 py-2 text-sm shadow-xl backdrop-blur-sm">
+      <p className="font-semibold text-[#f7fbff] mb-1">{label}</p>
+      <p className="text-dash-blue-2 font-bold">{fmt(payload[0].value)}</p>
     </div>
   );
 };
@@ -27,21 +27,21 @@ export default function SpendByYear({ data }) {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <BarChart data={data} margin={{ top: 4, right: 12, left: 0, bottom: 4 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
         <XAxis
           dataKey="year"
-          tick={{ fill: '#94a3b8', fontSize: 12 }}
+          tick={{ fill: '#8ea4c5', fontSize: 12 }}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tick={{ fill: '#94a3b8', fontSize: 11 }}
+          tick={{ fill: '#8ea4c5', fontSize: 11 }}
           axisLine={false}
           tickLine={false}
           tickFormatter={(v) => `$${v}`}
           width={50}
         />
-        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.05)' }} />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(36,79,143,0.12)' }} />
         <Bar dataKey="total" radius={[4, 4, 0, 0]} maxBarSize={60}>
           {data.map((_, i) => (
             <Cell key={i} fill={COLORS[i % COLORS.length]} />
@@ -54,7 +54,7 @@ export default function SpendByYear({ data }) {
 
 function EmptyState() {
   return (
-    <div className="h-60 flex items-center justify-center text-slate-500 text-sm">
+    <div className="h-60 flex items-center justify-center text-dash-muted text-sm">
       No data available
     </div>
   );
