@@ -7,7 +7,7 @@
 let activePage = 'pageExpenses';
 const PAGE_META = {
   pageExpenses: 'Compensation Dashboard',
-  pagePlayers: 'Football Operations Board',
+  pagePlayers: 'National Player Intelligence',
 };
 
 // ── Page Navigation ──────────────────────────────────────────

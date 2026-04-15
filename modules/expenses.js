@@ -761,8 +761,12 @@ function expRenderUpload() {
     <div class="upload-page">
       <div class="upload-header">
         <div class="upload-icon">🏈</div>
-        <h1>Toledo Football — Expense Dashboard</h1>
-        <p>Upload your player expense CSV or Excel file to populate the dashboard</p>
+        <div class="appTagRow uploadTagRow">
+          <span class="appTag appTagPrimary">Toledo Football Ops</span>
+          <span class="appTag">Import</span>
+        </div>
+        <h1>Expense Dashboard</h1>
+        <p>Upload your player expense CSV or Excel file to populate the dashboard.</p>
       </div>
       <div class="drop-zone" id="drop-zone">
         <input type="file" id="file-input" accept=".csv,.xlsx,.xls" style="display:none" />
@@ -830,7 +834,14 @@ function expRenderPreview() {
     <div class="preview-page">
       <div class="preview-title">
         <span class="icon">📄</span>
-        <div><h1>Import Preview</h1><p class="text-muted">${esc(fileName)}</p></div>
+        <div>
+          <div class="appTagRow previewTagRow">
+            <span class="appTag appTagPrimary">Toledo Football Ops</span>
+            <span class="appTag">Preview</span>
+          </div>
+          <h1>Import Preview</h1>
+          <p class="text-muted">${esc(fileName)}</p>
+        </div>
       </div>
       <div class="stat-grid-4">
         <div class="stat-card-sm"><p class="stat-sm-label">Players Found</p><p class="stat-sm-val">${players.length}</p></div>
@@ -893,6 +904,19 @@ function expRenderDashboard() {
   const remainingClass = s.remaining < 0 ? 'text-red' : s.remaining === 0 ? 'text-muted' : 'text-green';
   const remainingLabel = s.remaining < 0 ? 'Over budget' : s.remaining === 0 ? 'Fully allocated' : 'Available';
   const remainingIcon  = s.remaining < 0 ? '↓' : s.remaining === 0 ? '=' : '↑';
+  const approvedLinks  = evaluationSummary.reviewCounts.approved + evaluationSummary.reviewCounts.fixed;
+  const needsActionCount =
+    evaluationSummary.reviewCounts.pending +
+    evaluationSummary.reviewCounts.review +
+    evaluationSummary.reviewCounts.unmatched;
+  const topScoreSummary = evaluationSummary.topScore
+    ? `${esc(evaluationSummary.topScore.player.firstName)} ${esc(evaluationSummary.topScore.player.lastName)} leads the board at ${esc(evaluationSummary.topScore.bundle.assessment.scoreDisplay)}.`
+    : 'Upload roster data to start generating football role scores.';
+  const bestValueSummary = evaluationSummary.bestValue
+    ? `Best current value index belongs to ${esc(evaluationSummary.bestValue.player.firstName)} ${esc(evaluationSummary.bestValue.player.lastName)}.`
+    : needsActionCount > 0
+      ? `${needsActionCount} roster links still need action before value comparisons are complete.`
+      : 'Link players to CFBD data to compare role score against internal spend.';
 
   const colHeaders = EXPENSE_COLUMNS.map(c => `
     <th class="sortable${c.key === expState.sort.key ? ' sorted' : ''}${c.type === 'number' ? ' num' : ''}" data-sort="${c.key}">
@@ -900,7 +924,37 @@ function expRenderDashboard() {
     </th>`).join('');
 
   container.innerHTML = `
-    <div class="dash-body">
+    <div class="dash-body exp-shell">
+      <section class="opsHero expHero">
+        <div class="opsHeroCopy">
+          <div class="opsEyebrow">Roster Investment Command Center</div>
+          <div class="opsHeroTitleRow">
+            <h2 class="opsHeroTitle">Expenses</h2>
+            <span class="opsHeroBadge">Compensation Dashboard</span>
+          </div>
+          <p class="opsHeroText">Track uploaded spend, compare it against the budget, and connect internal roster data with CFBD player context before you make roster decisions.</p>
+          <div class="opsHeroTags">
+            <span class="opsHeroTag">Budget utilization</span>
+            <span class="opsHeroTag">Roster editing</span>
+            <span class="opsHeroTag">CFBD linkage</span>
+            <span class="opsHeroTag">Value review</span>
+          </div>
+        </div>
+        <div class="opsHeroAside">
+          <div class="opsHeroInsight">
+            <div class="opsHeroInsightLabel">Current read</div>
+            <div class="opsHeroInsightText">${topScoreSummary} ${bestValueSummary}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="topbar expTopbar">
+        <div class="badge"><strong>Roster</strong> ${s.playerCount} players</div>
+        <div class="badge"><strong>Import</strong> ${expState.fileName ? esc(expState.fileName) : 'Manual roster'}</div>
+        <div class="badge"><strong>Budget</strong> ${s.totalBudget > 0 ? fmtMoney(s.totalBudget) : 'Not set'}</div>
+        <div class="badge"><strong>Approved links</strong> ${approvedLinks}</div>
+      </section>
+
       <div class="exp-toolbar">
         <div>
           <span class="text-muted" style="font-size:12px">${s.playerCount} players${expState.fileName ? ' · ' + esc(expState.fileName) : ''}</span>
