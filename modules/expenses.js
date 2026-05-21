@@ -60,6 +60,68 @@ function expLoad() {
   return false;
 }
 
+// ── Demo Mode ────────────────────────────────────────────────
+function expGenerateDemoData() {
+  const demoPlayers = [
+    { lastName: 'Martinez', firstName: 'Carlos', position: 'QB', year: 'Jr', campus: 'On Campus', revShare: 85000, stipend: 12000, contractLength: 12 },
+    { lastName: 'Johnson', firstName: 'Marcus', position: 'RB', year: 'So', campus: 'On Campus', revShare: 52000, stipend: 8000, contractLength: 12 },
+    { lastName: 'Williams', firstName: 'Derek', position: 'WR', year: 'Sr', campus: 'Off Campus', revShare: 48000, stipend: 6000, contractLength: 12 },
+    { lastName: 'Thompson', firstName: 'Jake', position: 'WR', year: 'Jr', campus: 'On Campus', revShare: 45000, stipend: 7000, contractLength: 12 },
+    { lastName: 'Davis', firstName: 'Antonio', position: 'TE', year: 'Sr', campus: 'Off Campus', revShare: 38000, stipend: 7000, contractLength: 12 },
+    { lastName: 'Rodriguez', firstName: 'Miguel', position: 'OL', year: 'Sr', campus: 'On Campus', revShare: 42000, stipend: 8000, contractLength: 12 },
+    { lastName: 'Anderson', firstName: 'Tyler', position: 'OL', year: 'Jr', campus: 'On Campus', revShare: 40000, stipend: 7500, contractLength: 12 },
+    { lastName: 'Brown', firstName: 'James', position: 'OL', year: 'Jr', campus: 'Off Campus', revShare: 38000, stipend: 7000, contractLength: 12 },
+    { lastName: 'Wilson', firstName: 'Brandon', position: 'OL', year: 'So', campus: 'On Campus', revShare: 32000, stipend: 6000, contractLength: 12 },
+    { lastName: 'Garcia', firstName: 'Luis', position: 'DL', year: 'Sr', campus: 'Off Campus', revShare: 55000, stipend: 9000, contractLength: 12 },
+    { lastName: 'Miller', firstName: 'Jordan', position: 'DL', year: 'Jr', campus: 'On Campus', revShare: 46000, stipend: 7500, contractLength: 12 },
+    { lastName: 'Moore', firstName: 'Terrell', position: 'LB', year: 'Sr', campus: 'Off Campus', revShare: 58000, stipend: 9000, contractLength: 12 },
+    { lastName: 'Taylor', firstName: 'DeShawn', position: 'LB', year: 'Jr', campus: 'On Campus', revShare: 44000, stipend: 7000, contractLength: 12 },
+    { lastName: 'Jackson', firstName: 'Kevin', position: 'LB', year: 'So', campus: 'On Campus', revShare: 35000, stipend: 6500, contractLength: 12 },
+    { lastName: 'Harris', firstName: 'Malik', position: 'CB', year: 'Sr', campus: 'Off Campus', revShare: 50000, stipend: 8000, contractLength: 12 },
+    { lastName: 'Clark', firstName: 'Jamal', position: 'CB', year: 'Jr', campus: 'On Campus', revShare: 42000, stipend: 7000, contractLength: 12 },
+    { lastName: 'Lewis', firstName: 'Darius', position: 'S', year: 'Jr', campus: 'Off Campus', revShare: 47000, stipend: 7500, contractLength: 12 },
+    { lastName: 'Robinson', firstName: 'Isaiah', position: 'S', year: 'So', campus: 'On Campus', revShare: 36000, stipend: 6000, contractLength: 12 },
+    { lastName: 'Walker', firstName: 'Cameron', position: 'WR', year: 'Fr', campus: 'On Campus', revShare: 28000, stipend: 5000, contractLength: 6 },
+    { lastName: 'Young', firstName: 'Andre', position: 'RB', year: 'Fr', campus: 'On Campus', revShare: 25000, stipend: 5000, contractLength: 6 },
+    { lastName: 'Allen', firstName: 'Trevor', position: 'DL', year: 'So', campus: 'On Campus', revShare: 30000, stipend: 6000, contractLength: 12 },
+    { lastName: 'King', firstName: 'Xavier', position: 'CB', year: 'Fr', campus: 'On Campus', revShare: 24000, stipend: 5000, contractLength: 6 },
+    { lastName: 'Wright', firstName: 'Devin', position: 'OL', year: 'Fr', campus: 'On Campus', revShare: 22000, stipend: 5000, contractLength: 6 },
+    { lastName: 'Hill', firstName: 'Michael', position: 'TE', year: 'So', campus: 'Off Campus', revShare: 29000, stipend: 6000, contractLength: 12 },
+    { lastName: 'Scott', firstName: 'Christopher', position: 'QB', year: 'Fr', campus: 'On Campus', revShare: 32000, stipend: 5500, contractLength: 6 },
+  ];
+
+  expState.players = demoPlayers.map((p, i) => ({
+    ...p,
+    id: i + 1,
+    totalCompensation: p.revShare + p.stipend,
+  }));
+  expState.totalBudget = 1200000;
+  expState.fileName = 'Demo Data';
+  expState.nextId = demoPlayers.length + 1;
+  expSave();
+}
+
+function expSetMode(mode) {
+  try {
+    localStorage.setItem(MODE_KEY, mode);
+  } catch (_) {}
+}
+
+function expGetMode() {
+  try {
+    return localStorage.getItem(MODE_KEY);
+  } catch (_) {
+    return null;
+  }
+}
+
+function expResetMode() {
+  try {
+    localStorage.removeItem(MODE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (_) {}
+}
+
 // ── CSV / XLSX parsing ───────────────────────────────────────
 const HEADER_MAP = {
   'last name':                                   'lastName',
@@ -753,7 +815,78 @@ function expSortBy(key) {
   });
 }
 
-// ── Sub-view rendering (upload / preview / dashboard) ────────
+// ── Sub-view rendering (mode select / upload / preview / dashboard) ────────
+
+function expRenderModeSelect() {
+  const container = document.getElementById('expContent');
+  container.innerHTML = `
+    <div class="mode-select-page">
+      <div class="mode-select-header">
+        <div class="upload-icon">🏈</div>
+        <div class="appTagRow uploadTagRow">
+          <span class="appTag appTagPrimary">Toledo Football Ops</span>
+          <span class="appTag">Welcome</span>
+        </div>
+        <h1>Football Operations Dashboard</h1>
+        <p class="mode-select-intro">Choose how you'd like to use the dashboard</p>
+      </div>
+      
+      <div class="mode-select-cards">
+        <div class="mode-card" id="mode-card-upload">
+          <div class="mode-card-icon">📁</div>
+          <h2>Upload Data</h2>
+          <p class="mode-card-desc">Upload your own CSV or Excel file with player compensation data</p>
+          <ul class="mode-card-features">
+            <li>Full roster management</li>
+            <li>Budget tracking & analytics</li>
+            <li>CFBD player matching</li>
+            <li>Private & secure</li>
+          </ul>
+          <button class="btn btn-primary mode-card-btn" data-mode="upload">Get Started</button>
+        </div>
+        
+        <div class="mode-card mode-card-demo" id="mode-card-demo">
+          <div class="mode-card-badge">Portfolio Demo</div>
+          <div class="mode-card-icon">✨</div>
+          <h2>Demo Mode</h2>
+          <p class="mode-card-desc">Explore with pre-loaded fictional player data</p>
+          <ul class="mode-card-features">
+            <li>25 sample players</li>
+            <li>Realistic compensation data</li>
+            <li>All features enabled</li>
+            <li>No upload required</li>
+          </ul>
+          <button class="btn btn-secondary mode-card-btn" data-mode="demo">Try Demo</button>
+        </div>
+      </div>
+      
+      <p class="mode-select-note">
+        <strong>Note:</strong> All data is stored locally in your browser. 
+        You can switch modes anytime by clearing your data from the dashboard.
+      </p>
+    </div>`;
+
+  // Wire events
+  document.querySelectorAll('.mode-card-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.mode;
+      expSetMode(mode);
+      
+      if (mode === 'demo') {
+        expGenerateDemoData();
+        expState.subView = 'dashboard';
+        expRender();
+        // Show demo banner after a short delay to ensure DOM is ready
+        setTimeout(() => {
+          if (typeof showDemoBanner === 'function') showDemoBanner();
+        }, 100);
+      } else {
+        expState.subView = 'upload';
+        expRender();
+      }
+    });
+  });
+}
 
 function expRenderUpload() {
   const container = document.getElementById('expContent');
@@ -1032,11 +1165,15 @@ function expRenderDashboard() {
   // Wire events
   document.getElementById('btn-upload').addEventListener('click', () => { expState.subView = 'upload'; expRender(); });
   document.getElementById('btn-clear').addEventListener('click', () => {
-    if (!confirm('Clear all player data and return to the upload screen?')) return;
+    if (!confirm('Clear all data and return to mode selection? This will reset the dashboard.')) return;
+    expResetMode();
     expState.players = []; expState.totalBudget = null; expState.fileName = '';
     expState.sort = { key: null, dir: 'asc' }; expState.filter = { search: '', position: '', year: '', campus: '' };
-    localStorage.removeItem(STORAGE_KEY);
-    expState.subView = 'upload'; expRender();
+    expState.subView = 'mode-select';
+    // Remove demo banner if exists
+    document.getElementById('demo-banner')?.remove();
+    sessionStorage.removeItem('demo-banner-dismissed');
+    expRender();
   });
   document.getElementById('btn-edit-toggle').addEventListener('click', () => {
     expState.editMode = !expState.editMode;
@@ -1119,13 +1256,33 @@ function expRenderDashboard() {
 
 function expRender() {
   expDestroyCharts();
-  if (expState.subView === 'upload')       expRenderUpload();
+  if (expState.subView === 'mode-select')  expRenderModeSelect();
+  else if (expState.subView === 'upload')  expRenderUpload();
   else if (expState.subView === 'preview') expRenderPreview();
   else                                     expRenderDashboard();
 }
 
 // ── Init ─────────────────────────────────────────────────────
 function initExpenses() {
+  const mode = expGetMode();
+  
+  // If no mode selected yet, show mode selection screen
+  if (!mode) {
+    expState.subView = 'mode-select';
+    return;
+  }
+  
+  // Demo mode: generate demo data if not already loaded
+  if (mode === 'demo') {
+    const hasData = expLoad();
+    if (!hasData) {
+      expGenerateDemoData();
+    }
+    expState.subView = 'dashboard';
+    return;
+  }
+  
+  // Upload mode: normal flow
   const hasData = expLoad();
   if (hasData) expState.subView = 'dashboard';
   else expState.subView = 'upload';

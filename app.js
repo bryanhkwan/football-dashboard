@@ -82,7 +82,40 @@ window.addEventListener('DOMContentLoaded', () => {
   // All requests go through the Cloudflare worker cache (30-day TTL),
   // so this won't burn CFBD API quota on repeated opens.
   natLoadData();
+  
+  // Show demo banner if in demo mode (with delay to ensure DOM is ready)
+  setTimeout(showDemoBanner, 200);
 });
+
+// ── Demo Banner ──────────────────────────────────────────────
+
+function showDemoBanner() {
+  const mode = expGetMode();
+  if (mode !== 'demo') return;
+  
+  // Check if banner was dismissed
+  const dismissed = sessionStorage.getItem('demo-banner-dismissed');
+  if (dismissed) return;
+  
+  const banner = document.createElement('div');
+  banner.className = 'demo-banner';
+  banner.id = 'demo-banner';
+  banner.innerHTML = `
+    <div class="demo-banner-icon">✨</div>
+    <div class="demo-banner-content">
+      <div class="demo-banner-title">Demo Mode</div>
+      <div class="demo-banner-text">Using fictional data for portfolio demonstration</div>
+    </div>
+    <button class="demo-banner-close" id="demo-banner-close">Dismiss</button>
+  `;
+  
+  document.body.appendChild(banner);
+  
+  document.getElementById('demo-banner-close').addEventListener('click', () => {
+    banner.remove();
+    sessionStorage.setItem('demo-banner-dismissed', 'true');
+  });
+}
 
 // ── Window bridge (for debugging) ────────────────────────────
 window._app = {

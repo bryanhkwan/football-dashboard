@@ -8,6 +8,7 @@ const STORAGE_KEY  = 'football-dashboard-v1';
 const MATCHING_KEY = 'football-matching-v1';
 const MATCHING_APPROVAL_KEY = 'football-matching-approval-v1';
 const WATCHLIST_KEY = 'football-watchlist-v1';
+const MODE_KEY = 'football-mode-v1';
 const CFBD_SEASON  = '2025';
 
 const YEAR_ORDER = ['Fr', 'So', 'Jr', 'Sr', 'Grad', 'FR', 'SO', 'JR', 'SR', 'GR'];

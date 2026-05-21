@@ -2384,6 +2384,206 @@ select:focus {
 .badge-unlinked {
   border-color: rgba(148,163,184,0.22);
   background: rgba(148,163,184,0.12);
+  color: #cbd5e1;
+}
+
+/* ===== MODE SELECTION PAGE ===== */
+.mode-select-page {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 32px;
+}
+
+.mode-select-header {
+  text-align: center;
+  max-width: 600px;
+}
+
+.mode-select-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.mode-select-intro {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.mode-select-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+  gap: 24px;
+  width: 100%;
+  max-width: 840px;
+}
+
+.mode-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(22,33,51,0.94), rgba(15,23,42,0.9));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.mode-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(34,197,94,0.3);
+}
+
+.mode-card-demo:hover {
+  border-color: rgba(255,199,44,0.3);
+}
+
+.mode-card-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, var(--toledo), #ffd966);
+  color: var(--toledo-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.mode-card-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.mode-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.mode-card-desc {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.mode-card-features {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+  width: 100%;
+  text-align: left;
+}
+
+.mode-card-features li {
+  color: var(--text-3);
+  font-size: 13px;
+  padding: 6px 0;
+  padding-left: 24px;
+  position: relative;
+}
+
+.mode-card-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.mode-card-btn {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.mode-select-note {
+  max-width: 600px;
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.mode-select-note strong {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Demo mode banner */
+.demo-banner {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--toledo-dark), #004d7a);
+  border: 1px solid rgba(255,199,44,0.3);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+  from { transform: translateY(100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.demo-banner-icon {
+  font-size: 20px;
+}
+
+.demo-banner-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.demo-banner-title {
+  color: var(--toledo);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demo-banner-text {
+  color: var(--text-3);
+  font-size: 12px;
+}
+
+.demo-banner-close {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--text-3);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.demo-banner-close:hover {
+  background: rgba(255,255,255,0.2);
+  color: var(--text);
+}
   color: #dce6f4;
 }
 
@@ -2547,6 +2747,27 @@ select:focus {
   .preview-title h1 {
     font-size: 22px;
   }
+  
+  .mode-select-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .mode-card {
+    padding: 24px;
+  }
+  
+  .demo-banner {
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+    padding: 10px 14px;
+  }
+  
+  .demo-banner-close {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
 
   .topbar,
   .exp-toolbar,
